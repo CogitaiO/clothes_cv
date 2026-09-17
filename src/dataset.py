@@ -4,7 +4,7 @@ from torchvision import transforms
 import torch
 from torch.utils.data import DataLoader
 from model import ClothesModel
-
+import torch.nn as nn
 transform = transforms.Compose([
     transforms.Resize((224, 224)),
     transforms.ToTensor(),
@@ -74,12 +74,25 @@ if __name__ == "__main__":
 
 
     model = ClothesModel(num_classes=len(label_columns))
+    loss_fn = nn.CrossEntropyLoss()
+
+    optimizer = torch.optim.Adam(
+        model.parameters(),
+        lr=0.001,
+    )
+
     images, labels = next(iter(dataloader))
+
     outputs = model(images)
+    loss = loss_fn(outputs, labels)
 
-    print(outputs.shape)
-    print(outputs)
+    print("Before:", loss.item())
 
-    probabilities = torch.sigmoid(outputs)
-    print(probabilities)
-    print(probabilities.shape)
+    optimizer.zero_grad()
+    loss.backward()
+    optimizer.step()
+
+    outputs_after = model(images)
+    loss_after = loss_fn(outputs_after, labels)
+
+    print("After:", loss_after.item())

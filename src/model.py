@@ -8,6 +8,9 @@ class ClothesModel(nn.Module):
 
          self.model = models.resnet18(weights="DEFAULT")
 
+         for param in self.model.parameters():
+             param.requires_grad = False
+             
          in_features = self.model.fc.in_features
          self.model.fc = nn.Linear(in_features, num_classes)
 
