@@ -47,7 +47,6 @@ if __name__ == "__main__":
         model.parameters(),
         lr=0.01,
     )
-
     for epoch in range(20):
         model.train()
 
