@@ -1,0 +1,9 @@
+.venv/
+.git/
+.idea/
+data/
+checkpoints/
+results/
+__pycache__
+README.md
+input/

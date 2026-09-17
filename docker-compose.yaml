@@ -1,0 +1,10 @@
+services:
+  cv:
+    build: .
+    command: ["sleep", "infinity"]
+
+    volumes:
+      - ./data:/clothes_cv/data
+      - ./checkpoints:/clothes_cv/checkpoints
+      - ./results:/clothes_cv/results
+      - ./input:/clothes_cv/input
