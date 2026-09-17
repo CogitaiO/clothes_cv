@@ -14,8 +14,8 @@ train_data, val_data = train_test_split(
     stratify=classes
 )
 
-train_data.to_csv("../data/train.csv", index=False)
-val_data.to_csv("../data/val.csv", index=False)
+train_data.to_csv("data/train.csv", index=False)
+val_data.to_csv("data/val.csv", index=False)
 
 print(train_data[label_columns].sum())
 print(val_data[label_columns].sum())

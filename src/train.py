@@ -6,21 +6,21 @@ from dataset import ClothesDataset, get_dataset_info, transform
 from model import ClothesModel
 
 if __name__ == "__main__":
-    train_csv = "../data/train.csv"
-    val_csv = "../data/val.csv"
+    train_csv = "data/train.csv"
+    val_csv = "data/val.csv"
 
     _, label_columns = get_dataset_info(train_csv)
 
     train_dataset = ClothesDataset(
         csv_file=train_csv,
-        image_dir="../data/images",
+        image_dir="data/images",
         label_columns=label_columns,
         transform=transform
     )
 
     val_dataset = ClothesDataset(
         csv_file=val_csv,
-        image_dir="../data/images",
+        image_dir="data/images",
         label_columns=label_columns,
         transform=transform
     )
