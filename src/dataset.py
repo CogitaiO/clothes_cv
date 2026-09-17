@@ -29,8 +29,8 @@ class ClothesDataset():
         image_name = row["image"]
 
         labels = torch.tensor(
-            row[self.label_columns].values.astype(float),
-            dtype=torch.float32
+            row[self.label_columns].values.argmax(),
+            dtype=torch.long
         )
 
         image_path = self.image_dir + "/" + image_name
