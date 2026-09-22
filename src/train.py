@@ -42,7 +42,6 @@ if __name__ == "__main__":
         num_classes=len(label_columns),
     )
 
-    # Гарантируем, что градиенты считаются только для классификатора
     for param in model.backbone.parameters():
         param.requires_grad = False
     for param in model.backbone.fc.parameters():
@@ -50,7 +49,6 @@ if __name__ == "__main__":
 
     loss_fn = nn.CrossEntropyLoss()
 
-    # Передаем в оптимизатор только обучаемые параметры
     optimizer = torch.optim.Adam(
         filter(lambda p: p.requires_grad, model.parameters()),
         lr=0.01,
@@ -83,6 +81,8 @@ if __name__ == "__main__":
 
         model.eval()
         val_loss = 0.0
+        val_corr = 0
+        val_total = 0
 
         with torch.no_grad():
             for images, labels in val_loader:
@@ -90,8 +90,12 @@ if __name__ == "__main__":
                 loss = loss_fn(outputs, labels)
                 val_loss += loss.item()
 
-        val_loss /= len(val_loader)
+                prediction = outputs.argmax(dim=1)
+                val_corr += (prediction == labels).sum().item()
+                val_total += labels.size(0)
 
+        val_loss /= len(val_loader)
+        val_accuracy = val_corr / val_total
         if val_loss < best_val_loss:
             best_val_loss = val_loss
 
@@ -104,11 +108,12 @@ if __name__ == "__main__":
                 },
                 checkpoint_path,
             )
-        with open("logs.txt", "w", encoding="utf-8") as f:
-            f.write()
         print(
             f"Epoch {epoch + 1:02d}/20: "
             f"train_loss={train_loss:.4f}, "
             f"val_loss={val_loss:.4f}, "
-            f"best_val_loss={best_val_loss:.4f}"
+            f"best_val_loss={best_val_loss:.4f}, "
+            f"val_corr={val_corr:}, "
+            f"val_total={val_total:} ,"
+            f"val_accuracy={val_accuracy:.4f}"
         )
